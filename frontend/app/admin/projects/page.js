@@ -29,10 +29,6 @@ export default function AdminProjectsPage() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef(null);
 
-  useEffect(() => {
-    fetchProjects();
-  }, []);
-
   const fetchProjects = async () => {
     setLoading(true);
     try {
@@ -46,6 +42,13 @@ export default function AdminProjectsPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchProjects();
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   const resetForm = () => {
     setTitle('');
@@ -100,21 +103,21 @@ export default function AdminProjectsPage() {
       const res = await uploadMultipleImages(formData);
       setUploadProgress(80);
       if (res.data?.success) {
-        setImages(prev => [...prev, ...res.data.data]);
+        const newImgs = res.data.data.map(img => ({
+          url: img.url,
+          publicId: img.publicId,
+          alt: '',
+          isBefore: false
+        }));
+        setImages(prev => [...prev, ...newImgs]);
         toast.success(`${files.length} images uploaded successfully.`);
       }
     } catch (error) {
       console.error('Upload error:', error);
-      // Fallback local mock upload if server/Cloudinary is unconfigured
-      const mockImages = files.map((file, i) => ({
-        url: URL.createObjectURL(file),
-        publicId: `mock-id-${Date.now()}-${i}`
-      }));
-      setImages(prev => [...prev, ...mockImages]);
-      toast.success('Mock Images added (Offline Mode).');
+      toast.error('Image upload failed. Please check your Cloudinary configuration.');
     } finally {
       setUploading(false);
-      setUploadProgress(100);
+      setUploadProgress(0);
     }
   };
 
@@ -166,22 +169,8 @@ export default function AdminProjectsPage() {
       fetchProjects();
     } catch (err) {
       console.error('Submit error:', err);
-      // Fallback for mock demo list if backend is unconfigured
-      const mockProj = {
-        _id: editingId || `mock-proj-${Date.now()}`,
-        ...payload,
-        createdAt: new Date().toISOString()
-      };
-
-      if (editingId) {
-        setProjects(prev => prev.map(p => p._id === editingId ? mockProj : p));
-        toast.success('Project updated (Demo Mode).');
-      } else {
-        setProjects(prev => [mockProj, ...prev]);
-        toast.success('Project created (Demo Mode).');
-      }
-      setShowModal(false);
-      resetForm();
+      const msg = err?.response?.data?.message || 'Failed to save project. Please try again.';
+      toast.error(msg);
     }
   };
 

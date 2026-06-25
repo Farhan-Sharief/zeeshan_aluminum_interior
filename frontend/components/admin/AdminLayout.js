@@ -36,14 +36,9 @@ export default function AdminLayout({ children }) {
           localStorage.removeItem('adminToken');
           router.push('/admin/login');
         }
-      } catch (err) {
-        // Fallback for offline demo mode
-        if (token.startsWith('mock-token')) {
-          setAdmin({ name: 'Zeeshan (Demo)', username: 'admin', email: 'admin@zeeshan.com' });
-        } else {
-          localStorage.removeItem('adminToken');
-          router.push('/admin/login');
-        }
+      } catch {
+        localStorage.removeItem('adminToken');
+        router.push('/admin/login');
       } finally {
         setLoading(false);
       }

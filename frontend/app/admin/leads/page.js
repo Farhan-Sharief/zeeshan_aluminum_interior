@@ -16,10 +16,6 @@ export default function AdminLeadsPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('all'); // 'all', 'unread', 'read'
 
-  useEffect(() => {
-    fetchLeads();
-  }, [activeTab]);
-
   const fetchLeads = async () => {
     setLoading(true);
     try {
@@ -40,16 +36,23 @@ export default function AdminLeadsPage() {
     }
   };
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchLeads();
+    }, 0);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab]);
+
   const handleMarkRead = async (id) => {
     try {
       const res = await markContactRead(id);
       if (res.data?.success) {
-        toast.success('Inquiry marked as read.');
         setLeads(prev => prev.map(lead => lead._id === id ? { ...lead, isRead: true } : lead));
+        toast.success('Inquiry marked as read.');
       }
     } catch {
-      setLeads(prev => prev.map(lead => lead._id === id ? { ...lead, isRead: true } : lead));
-      toast.success('Marked read (Demo Mode).');
+      toast.error('Failed to mark as read. Please try again.');
     }
   };
 
@@ -62,8 +65,7 @@ export default function AdminLeadsPage() {
         fetchLeads();
       }
     } catch {
-      setLeads(prev => prev.filter(lead => lead._id !== id));
-      toast.success('Deleted (Demo Mode).');
+      toast.error('Failed to delete inquiry. Please try again.');
     }
   };
 

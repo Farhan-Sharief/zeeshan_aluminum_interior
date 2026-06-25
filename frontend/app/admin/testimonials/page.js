@@ -22,10 +22,6 @@ export default function AdminTestimonialsPage() {
   // Upload States
   const [uploading, setUploading] = useState(false);
 
-  useEffect(() => {
-    fetchTestimonials();
-  }, []);
-
   const fetchTestimonials = async () => {
     setLoading(true);
     try {
@@ -39,6 +35,13 @@ export default function AdminTestimonialsPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchTestimonials();
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   const resetForm = () => {
     setClientName('');
@@ -89,13 +92,9 @@ export default function AdminTestimonialsPage() {
         });
         toast.success('Client photo uploaded.');
       }
-    } catch {
-      // Fallback local Mock image for demo offline mode
-      setImage({
-        url: URL.createObjectURL(file),
-        publicId: `mock-avatar-${Date.now()}`
-      });
-      toast.success('Local photo attached (Offline Mode).');
+    } catch (error) {
+      console.error('Image upload error:', error);
+      toast.error('Image upload failed. Please check your Cloudinary configuration.');
     } finally {
       setUploading(false);
     }
@@ -141,21 +140,8 @@ export default function AdminTestimonialsPage() {
       fetchTestimonials();
     } catch (err) {
       console.error(err);
-      // Mock save fallback
-      const mockTesti = {
-        _id: editingId || `mock-testi-${Date.now()}`,
-        ...payload,
-        createdAt: new Date().toISOString()
-      };
-
-      if (editingId) {
-        setTestimonials(prev => prev.map(t => t._id === editingId ? mockTesti : t));
-      } else {
-        setTestimonials(prev => [mockTesti, ...prev]);
-      }
-      toast.success('Saved (Demo Mode).');
-      setShowModal(false);
-      resetForm();
+      const msg = err?.response?.data?.message || 'Failed to save testimonial. Please try again.';
+      toast.error(msg);
     }
   };
 

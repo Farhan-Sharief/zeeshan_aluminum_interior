@@ -18,7 +18,7 @@ router.get('/', authMiddleware, async (req, res) => {
     ]);
 
     const totalImages = await Project.aggregate([
-      { $project: { imageCount: { $size: '$images' } } },
+      { $project: { imageCount: { $size: { $ifNull: ['$images', []] } } } },
       { $group: { _id: null, total: { $sum: '$imageCount' } } }
     ]);
 

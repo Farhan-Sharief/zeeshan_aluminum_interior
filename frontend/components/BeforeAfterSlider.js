@@ -15,31 +15,40 @@ export default function BeforeAfterSlider({ beforeImage, afterImage, heightClass
     setSliderPosition(position);
   };
 
-  const handleTouchMove = (e) => {
-    if (!isDragging) return;
-    handleMove(e.touches[0].clientX);
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-    handleMove(e.clientX);
-  };
-
   useEffect(() => {
     const handleMouseUp = () => setIsDragging(false);
+
+    const handleWindowMouseMove = (e) => {
+      if (!isDragging) return;
+      handleMove(e.clientX);
+    };
+
+    const handleWindowTouchMove = (e) => {
+      if (!isDragging) return;
+      if (e.touches.length > 0) {
+        handleMove(e.touches[0].clientX);
+      }
+    };
+
     window.addEventListener('mouseup', handleMouseUp);
     window.addEventListener('touchend', handleMouseUp);
+
+    if (isDragging) {
+      window.addEventListener('mousemove', handleWindowMouseMove);
+      window.addEventListener('touchmove', handleWindowTouchMove, { passive: true });
+    }
+
     return () => {
       window.removeEventListener('mouseup', handleMouseUp);
       window.removeEventListener('touchend', handleMouseUp);
+      window.removeEventListener('mousemove', handleWindowMouseMove);
+      window.removeEventListener('touchmove', handleWindowTouchMove);
     };
-  }, []);
+  }, [isDragging]);
 
   return (
     <div
       ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onTouchMove={handleTouchMove}
       className={`relative w-full ${heightClass} overflow-hidden select-none rounded-xl shadow-lg border border-gray-200 cursor-ew-resize`}
     >
       {/* Before Image (Left/Full Background) */}

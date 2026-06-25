@@ -59,12 +59,6 @@ export default function AdminLoginPage() {
       const msg = error.response?.data?.message || 'Authentication failed. Please check credentials.';
       toast.error(msg);
       
-      // Fallback for demonstration/offline purposes:
-      if (username === 'admin' && password === 'admin') {
-        localStorage.setItem('adminToken', 'mock-token-for-demo-mode-zeeshan');
-        toast.success('Offline Demo Mode Activated.');
-        router.push('/admin/dashboard');
-      }
     } finally {
       setLoading(false);
     }
@@ -157,9 +151,6 @@ export default function AdminLoginPage() {
           >
             {isSetupMode ? 'Back to Login' : 'Setup Initial Admin Account'}
           </button>
-          <div className="mt-4 text-[10px] text-white/30">
-            For Demo/Offline entry use: admin / admin
-          </div>
         </div>
       </div>
     </main>

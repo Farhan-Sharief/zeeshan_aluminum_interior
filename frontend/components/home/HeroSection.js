@@ -26,11 +26,18 @@ export default function HeroSection() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    setIsLoaded(true);
+    const loadTimer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 50);
+
     const timer = setInterval(() => {
       setCurrent((prev) => (prev + 1) % heroSlides.length);
     }, 7000);
-    return () => clearInterval(timer);
+
+    return () => {
+      clearTimeout(loadTimer);
+      clearInterval(timer);
+    };
   }, []);
 
   return (
