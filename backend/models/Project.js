@@ -58,14 +58,13 @@ const projectSchema = new mongoose.Schema({
 });
 
 // Auto-generate slug from title
-projectSchema.pre('save', function(next) {
+projectSchema.pre('save', function() {
   if (this.isModified('title')) {
     this.slug = this.title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '') + '-' + Date.now().toString(36);
   }
-  next();
 });
 
 // Indexes
