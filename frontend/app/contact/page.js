@@ -100,17 +100,17 @@ export default function ContactPage() {
               </div>
 
               <div className="space-y-6">
-                <a href="tel:+919XXXXXXXXX" className="flex items-start gap-4 p-4 rounded-lg bg-cream/50 hover:bg-cream transition-colors group">
+                <a href="tel:+918867218051" className="flex items-start gap-4 p-4 rounded-lg bg-cream/50 hover:bg-cream transition-colors group">
                   <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-white transition-all">
                     <FaPhone size={16} />
                   </div>
                   <div>
                     <span className="block text-xs uppercase tracking-wider text-silver">Call Us</span>
-                    <span className="text-sm font-semibold text-charcoal/80">+91 9XXX XXX XXX</span>
+                    <span className="text-sm font-semibold text-charcoal/80">+91 88672 18051</span>
                   </div>
                 </a>
 
-                <a href="https://wa.me/919XXXXXXXXX?text=Hi" target="_blank" rel="noopener noreferrer" className="flex items-start gap-4 p-4 rounded-lg bg-cream/50 hover:bg-cream transition-colors group">
+                <a href="https://wa.me/918867218051?text=Hi" target="_blank" rel="noopener noreferrer" className="flex items-start gap-4 p-4 rounded-lg bg-cream/50 hover:bg-cream transition-colors group">
                   <div className="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center text-[#25D366] group-hover:bg-[#25D366] group-hover:text-white transition-all">
                     <FaWhatsapp size={18} />
                   </div>
@@ -120,13 +120,13 @@ export default function ContactPage() {
                   </div>
                 </a>
 
-                <a href="mailto:info@zeeshanaluminum.com" className="flex items-start gap-4 p-4 rounded-lg bg-cream/50 hover:bg-cream transition-colors group">
+                <a href="mailto:zeeshanaluminiumfabricationand@gmail.com" className="flex items-start gap-4 p-4 rounded-lg bg-cream/50 hover:bg-cream transition-colors group">
                   <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center text-gold group-hover:bg-gold group-hover:text-white transition-all">
                     <FaEnvelope size={16} />
                   </div>
                   <div>
                     <span className="block text-xs uppercase tracking-wider text-silver">Email Address</span>
-                    <span className="text-sm font-semibold text-charcoal/80">info@zeeshanaluminum.com</span>
+                    <span className="text-sm font-semibold text-charcoal/80">zeeshanaluminiumfabricationand@gmail.com</span>
                   </div>
                 </a>
 

@@ -52,7 +52,7 @@ export default function Footer() {
             </p>
             <div className="flex gap-4">
               {[
-                { icon: FaWhatsapp, href: 'https://wa.me/919XXXXXXXXX', label: 'WhatsApp' },
+                { icon: FaWhatsapp, href: 'https://wa.me/918867218051', label: 'WhatsApp' },
                 { icon: FaInstagram, href: '#', label: 'Instagram' },
                 { icon: FaFacebookF, href: '#', label: 'Facebook' },
                 { icon: FaYoutube, href: '#', label: 'YouTube' },
@@ -103,13 +103,13 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-heading text-lg mb-8 font-light">Private Consultation</h4>
             <div className="space-y-6">
-              <a href="tel:+919XXXXXXXXX" className="flex items-start gap-4 text-xs text-white/50 hover:text-gold uppercase tracking-widest transition-colors group">
+              <a href="tel:+918867218051" className="flex items-start gap-4 text-xs text-white/50 hover:text-gold uppercase tracking-widest transition-colors group">
                 <FaPhone className="mt-0.5 text-gold/50 group-hover:text-gold transition-colors" size={12} />
-                <span className="leading-relaxed">+91 9XXX XXX XXX</span>
+                <span className="leading-relaxed">+91 88672 18051</span>
               </a>
-              <a href="mailto:info@zeeshanaluminum.com" className="flex items-start gap-4 text-xs text-white/50 hover:text-gold uppercase tracking-widest transition-colors group">
+              <a href="mailto:zeeshanaluminiumfabricationand@gmail.com" className="flex items-start gap-4 text-xs text-white/50 hover:text-gold uppercase tracking-widest transition-colors group">
                 <FaEnvelope className="mt-0.5 text-gold/50 group-hover:text-gold transition-colors" size={12} />
-                <span className="leading-relaxed whitespace-normal break-all">info@zeeshanaluminum.com</span>
+                <span className="leading-relaxed whitespace-normal break-all">zeeshanaluminiumfabricationand@gmail.com</span>
               </a>
               <div className="flex items-start gap-4 text-xs text-white/50 uppercase tracking-widest">
                 <FaMapMarkerAlt className="mt-0.5 text-gold/50 flex-shrink-0" size={12} />

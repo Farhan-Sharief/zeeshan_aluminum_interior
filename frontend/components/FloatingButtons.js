@@ -17,7 +17,7 @@ export default function FloatingButtons() {
     <>
       {/* WhatsApp Button */}
       <motion.a
-        href="https://wa.me/919XXXXXXXXX?text=Hi%2C%20I%27m%20interested%20in%20your%20services"
+        href="https://wa.me/918867218051?text=Hi%2C%20I%27m%20interested%20in%20your%20services"
         target="_blank"
         rel="noopener noreferrer"
         initial={{ scale: 0 }}
@@ -32,7 +32,7 @@ export default function FloatingButtons() {
 
       {/* Call Button */}
       <motion.a
-        href="tel:+919XXXXXXXXX"
+        href="tel:+918867218051"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ delay: 1.2, type: 'spring' }}
