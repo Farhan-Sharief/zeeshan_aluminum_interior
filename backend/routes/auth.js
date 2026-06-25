@@ -16,8 +16,10 @@ router.post('/login', async (req, res) => {
       });
     }
 
+    const searchUsername = username.trim().toLowerCase();
+
     const admin = await Admin.findOne({ 
-      $or: [{ username }, { email: username }] 
+      $or: [{ username: searchUsername }, { email: searchUsername }] 
     }).select('+password');
 
     if (!admin) {
