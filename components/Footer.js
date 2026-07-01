@@ -29,7 +29,7 @@ export default function Footer() {
       {/* Main Footer */}
       <div className="container-custom pt-24 pb-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-12">
-          
+
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block mb-8">
@@ -113,7 +113,7 @@ export default function Footer() {
               </a>
               <div className="flex items-start gap-4 text-xs text-white/50 uppercase tracking-widest">
                 <FaMapMarkerAlt className="mt-0.5 text-gold/50 flex-shrink-0" size={12} />
-                <span className="leading-relaxed">Zeeshan Architectural Studio,<br />Main Road City Market,<br />State, India</span>
+                <span className="leading-relaxed">Zeeshan Aluminum Interior<br />AA Colony Nizamiya Masjid complex near Railway Station<br />Shimoga,Karnataka</span>
               </div>
             </div>
           </div>
