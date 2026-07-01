@@ -19,8 +19,8 @@ node_modules/
 **/lerna-debug.log*
 
 # Next.js build output
-frontend/.next/
-frontend/out/
+.next/
+out/
 
 # OS files
 .DS_Store
