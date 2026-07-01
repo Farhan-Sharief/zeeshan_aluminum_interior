@@ -1,6 +1,6 @@
 import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
-import { Toaster } from 'react-hot-toast';
+import ToasterProvider from '@/components/ToasterProvider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -35,20 +35,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body>
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: '#1a1a1a',
-              color: '#f5f0eb',
-              borderRadius: '8px',
-              border: '1px solid rgba(201, 168, 76, 0.3)',
-            },
-            success: { iconTheme: { primary: '#c9a84c', secondary: '#fff' } },
-            error: { iconTheme: { primary: '#ef4444', secondary: '#fff' } },
-          }}
-        />
+        <ToasterProvider />
         {children}
       </body>
     </html>
