@@ -14,10 +14,18 @@ const playfair = Playfair_Display({
   display: 'swap',
 });
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+};
+
 export const metadata = {
   title: 'Zeeshan Aluminum Interior | Premium Aluminum & Interior Solutions',
   description: 'Transform your spaces with premium aluminum fabrication, TV cabinets, modular interiors, and custom design solutions. Expert craftsmanship with modern design excellence.',
   keywords: 'aluminum work, interior design, TV cabinet design, modular interiors, custom furniture, aluminum fabrication, false ceiling, kitchen interiors',
+  icons: {
+    icon: '/favicon.ico',
+  },
   openGraph: {
     title: 'Zeeshan Aluminum Interior | Premium Aluminum & Interior Solutions',
     description: 'Transform your spaces with premium aluminum fabrication, TV cabinets, modular interiors, and custom design solutions.',
