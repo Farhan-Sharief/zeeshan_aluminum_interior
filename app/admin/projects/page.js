@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { HiPlus, HiPencil, HiTrash, HiPhoto, HiOutlineCloudUpload, HiX } from 'react-icons/hi';
 import Image from 'next/image';
 
-const categories = ['TV Cabinet', 'Aluminum Work', 'Interior Work'];
+const categories = ['TV Cabinet', 'Aluminum Work', 'Interior Work', 'Italian Kitchen', 'wardrobe'];
 
 export default function AdminProjectsPage() {
   const [projects, setProjects] = useState([]);
@@ -376,7 +376,7 @@ export default function AdminProjectsPage() {
                 {/* Cloudinary drag and drop image section */}
                 <div className="space-y-4">
                   <label className="block text-xs uppercase tracking-wider text-silver font-medium">Project Images *</label>
-                  
+
                   <div
                     onClick={() => fileInputRef.current?.click()}
                     className="border-2 border-dashed border-gray-200 hover:border-gold/50 rounded-xl p-8 text-center cursor-pointer transition-colors bg-zinc-50"
