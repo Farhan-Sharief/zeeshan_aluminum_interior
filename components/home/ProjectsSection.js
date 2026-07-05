@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import SectionReveal from '../SectionReveal';
 import SkeletonCard from '../SkeletonCard';
 import { HiArrowRight } from 'react-icons/hi';
-import { getFeaturedProjects } from '@/lib/api';
+import { getFeaturedProjects, getCategories } from '@/lib/api';
 
 const fallbackProjects = [
   { _id: '1', title: 'Minimalist TV Panel', slug: 'modern-living-room-tv-unit', category: 'TV Cabinet', images: [{ url: 'https://images.unsplash.com/photo-1593696140826-c58b021acf8b?w=800&q=80' }], description: 'Seamless media integration with high-gloss acoustic panels.' },
@@ -15,29 +15,37 @@ const fallbackProjects = [
   { _id: '4', title: 'Walk-In Grandeur', slug: 'luxury-bedroom-wardrobe', category: 'Interior Work', images: [{ url: 'https://images.unsplash.com/photo-1616137466211-f736a1358f7e?w=800&q=80' }], description: 'Floor-to-ceiling glass wardrobes with sensor-activated ambient lighting.' },
 ];
 
-const categories = ['All', 'TV Cabinet', 'Aluminum Work', 'Interior Work'];
-
 export default function ProjectsSection() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState(['All', 'TV Cabinet', 'Aluminum Work', 'Interior Work']);
   const [activeCategory, setActiveCategory] = useState('All');
 
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchProjectsAndCategories = async () => {
       try {
-        const res = await getFeaturedProjects();
-        if (res.data?.data?.length > 0) {
-          setProjects(res.data.data.slice(0, 4));
+        const [projRes, catRes] = await Promise.allSettled([
+          getFeaturedProjects(),
+          getCategories()
+        ]);
+
+        if (projRes.status === 'fulfilled' && projRes.value.data?.data?.length > 0) {
+          setProjects(projRes.value.data.data.slice(0, 4));
         } else {
           setProjects(fallbackProjects);
         }
-      } catch {
+
+        if (catRes.status === 'fulfilled' && catRes.value.data?.success) {
+          setCategories(['All', ...catRes.value.data.data]);
+        }
+      } catch (err) {
+        console.error('Error fetching projects and categories:', err);
         setProjects(fallbackProjects);
       } finally {
         setLoading(false);
       }
     };
-    fetchProjects();
+    fetchProjectsAndCategories();
   }, []);
 
   const filtered = activeCategory === 'All'

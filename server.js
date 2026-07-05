@@ -59,6 +59,7 @@ nextApp.prepare().then(() => {
   // API Routes
   const authRoutes = require('./routes/auth');
   const projectRoutes = require('./routes/projects');
+  const categoryRoutes = require('./routes/categories');
   const testimonialRoutes = require('./routes/testimonials');
   const contactRoutes = require('./routes/contacts');
   const statsRoutes = require('./routes/stats');
@@ -66,6 +67,7 @@ nextApp.prepare().then(() => {
 
   app.use('/api/auth', authRoutes);
   app.use('/api/projects', projectRoutes);
+  app.use('/api/categories', categoryRoutes);
   app.use('/api/testimonials', testimonialRoutes);
   app.use('/api/contacts', contactRoutes);
   app.use('/api/stats', statsRoutes);
@@ -93,8 +95,17 @@ nextApp.prepare().then(() => {
 
   // Database connection & server start
   mongoose.connect(process.env.MONGODB_URI)
-    .then(() => {
+    .then(async () => {
       console.log('✅ MongoDB connected successfully');
+      
+      // Run category migration
+      try {
+        const runCategoryMigration = require('./lib/dbMigration');
+        await runCategoryMigration();
+      } catch (migrationError) {
+        console.error('❌ Failed to run startup category migration:', migrationError);
+      }
+
       app.listen(PORT, () => {
         console.log(`🚀 Server running on port ${PORT} [${process.env.NODE_ENV || 'development'}]`);
       });

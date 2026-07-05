@@ -1,7 +1,9 @@
 const express = require('express');
 const Project = require('../models/Project');
+const Category = require('../models/Category');
 const authMiddleware = require('../middleware/auth');
 const cloudinary = require('../config/cloudinary');
+const normalizeCategoryName = require('../lib/normalizeCategory');
 const router = express.Router();
 
 // GET /api/projects - Public: Get all published projects
@@ -104,6 +106,14 @@ router.get('/:slug', async (req, res) => {
 // POST /api/projects - Admin: Create project
 router.post('/', authMiddleware, async (req, res) => {
   try {
+    if (req.body.category) {
+      req.body.category = normalizeCategoryName(req.body.category);
+      // Ensure category exists in Category collection
+      const categoryExists = await Category.findOne({ name: req.body.category });
+      if (!categoryExists) {
+        await Category.create({ name: req.body.category });
+      }
+    }
     const project = await Project.create(req.body);
     res.status(201).json({ success: true, data: project });
   } catch (error) {
@@ -152,6 +162,14 @@ router.get('/admin/all', authMiddleware, async (req, res) => {
 // PUT /api/projects/:id - Admin: Update project
 router.put('/:id', authMiddleware, async (req, res) => {
   try {
+    if (req.body.category) {
+      req.body.category = normalizeCategoryName(req.body.category);
+      // Ensure category exists in Category collection
+      const categoryExists = await Category.findOne({ name: req.body.category });
+      if (!categoryExists) {
+        await Category.create({ name: req.body.category });
+      }
+    }
     const project = await Project.findByIdAndUpdate(
       req.params.id,
       req.body,
@@ -168,6 +186,10 @@ router.put('/:id', authMiddleware, async (req, res) => {
     res.json({ success: true, data: project });
   } catch (error) {
     console.error('Update project error:', error);
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(e => e.message);
+      return res.status(400).json({ success: false, message: messages.join(', ') });
+    }
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });

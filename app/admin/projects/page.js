@@ -1,12 +1,10 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
-import { getAdminProjects, createProject, updateProject, deleteProject, uploadMultipleImages, deleteImage } from '@/lib/api';
+import { getAdminProjects, createProject, updateProject, deleteProject, uploadMultipleImages, deleteImage, getCategories } from '@/lib/api';
 import toast from 'react-hot-toast';
 import { HiPlus, HiPencil, HiTrash, HiPhoto, HiOutlineCloudUpload, HiX } from 'react-icons/hi';
 import Image from 'next/image';
-
-const categories = ['TV Cabinet', 'Aluminum Work', 'Interior Work', 'Italian Kitchen', 'wardrobe'];
 
 export default function AdminProjectsPage() {
   const [projects, setProjects] = useState([]);
@@ -23,6 +21,11 @@ export default function AdminProjectsPage() {
   const [completionDate, setCompletionDate] = useState('');
   const [featured, setFeatured] = useState(false);
   const [images, setImages] = useState([]); // Array of { url, publicId }
+
+  // Category States
+  const [allCategories, setAllCategories] = useState([]);
+  const [isNewCategory, setIsNewCategory] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
 
   // Upload States
   const [uploading, setUploading] = useState(false);
@@ -43,16 +46,28 @@ export default function AdminProjectsPage() {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const res = await getCategories();
+      if (res.data?.success) {
+        setAllCategories(res.data.data);
+      }
+    } catch {
+      toast.error('Failed to load categories.');
+    }
+  };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       fetchProjects();
+      fetchCategories();
     }, 0);
     return () => clearTimeout(timer);
   }, []);
 
   const resetForm = () => {
     setTitle('');
-    setCategory('TV Cabinet');
+    setCategory(allCategories[0] || 'TV Cabinet');
     setSubcategory('');
     setDescription('');
     setMaterials('');
@@ -61,6 +76,8 @@ export default function AdminProjectsPage() {
     setImages([]);
     setEditingId(null);
     setUploadProgress(0);
+    setIsNewCategory(false);
+    setNewCategoryName('');
   };
 
   const handleEdit = (project) => {
@@ -73,6 +90,8 @@ export default function AdminProjectsPage() {
     setCompletionDate(project.completionDate ? project.completionDate.split('T')[0] : '');
     setFeatured(project.featured || false);
     setImages(project.images || []);
+    setIsNewCategory(false);
+    setNewCategoryName('');
     setShowModal(true);
   };
 
@@ -167,6 +186,7 @@ export default function AdminProjectsPage() {
       setShowModal(false);
       resetForm();
       fetchProjects();
+      fetchCategories();
     } catch (err) {
       console.error('Submit error:', err);
       const msg = err?.response?.data?.message || 'Failed to save project. Please try again.';
@@ -306,14 +326,39 @@ export default function AdminProjectsPage() {
                   <div>
                     <label className="block text-xs uppercase tracking-wider text-silver mb-2 font-medium">Main Category *</label>
                     <select
-                      value={category}
-                      onChange={(e) => setCategory(e.target.value)}
+                      value={isNewCategory ? 'NEW' : category}
+                      onChange={(e) => {
+                        if (e.target.value === 'NEW') {
+                          setIsNewCategory(true);
+                          setCategory('');
+                        } else {
+                          setIsNewCategory(false);
+                          setCategory(e.target.value);
+                        }
+                      }}
                       className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:border-gold/50 text-sm text-charcoal/80"
                     >
-                      {categories.map(cat => (
+                      {allCategories.map(cat => (
                         <option key={cat} value={cat}>{cat}</option>
                       ))}
+                      <option value="NEW">+ Create New Category...</option>
                     </select>
+
+                    {isNewCategory && (
+                      <div className="mt-3">
+                        <input
+                          type="text"
+                          required
+                          value={newCategoryName}
+                          onChange={(e) => {
+                            setNewCategoryName(e.target.value);
+                            setCategory(e.target.value);
+                          }}
+                          placeholder="Enter new category name..."
+                          className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:border-gold/50 text-sm"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
 

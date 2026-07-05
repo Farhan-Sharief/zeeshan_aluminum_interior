@@ -15,7 +15,7 @@ const projectSchema = new mongoose.Schema({
   category: {
     type: String,
     required: [true, 'Category is required'],
-    enum: ['TV Cabinet', 'Aluminum Work', 'Interior Work'],
+    trim: true
   },
   subcategory: {
     type: String,
@@ -71,6 +71,5 @@ projectSchema.pre('save', function() {
 projectSchema.index({ category: 1, status: 1 });
 projectSchema.index({ featured: 1 });
 projectSchema.index({ createdAt: -1 });
-projectSchema.index({ slug: 1 });
 
 module.exports = mongoose.model('Project', projectSchema);
