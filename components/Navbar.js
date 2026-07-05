@@ -3,23 +3,58 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiMenuAlt3, HiX } from 'react-icons/hi';
-
-const navLinks = [
-  { name: 'Home', href: '/' },
-  { name: 'TV Cabinets', href: '/tv-cabinets' },
-  { name: 'Aluminum Work', href: '/aluminum-work' },
-  { name: 'Interior Work', href: '/interior-work' },
-  { name: 'Contact', href: '/contact' },
-];
+import { getCategories } from '@/lib/api';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [navLinks, setNavLinks] = useState([
+    { name: 'Home', href: '/' },
+    { name: 'TV Cabinets', href: '/tv-cabinets' },
+    { name: 'Aluminum Work', href: '/aluminum-work' },
+    { name: 'Interior Work', href: '/interior-work' },
+    { name: 'Contact', href: '/contact' },
+  ]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const loadDynamicCategories = async () => {
+      try {
+        const res = await getCategories();
+        if (res.data?.success) {
+          const categories = res.data.data;
+          const dynamicLinks = [
+            { name: 'Home', href: '/' }
+          ];
+
+          categories.forEach(cat => {
+            if (cat === 'TV Cabinet') {
+              dynamicLinks.push({ name: 'TV Cabinets', href: '/tv-cabinets' });
+            } else if (cat === 'Aluminum Work') {
+              dynamicLinks.push({ name: 'Aluminum Work', href: '/aluminum-work' });
+            } else if (cat === 'Interior Work') {
+              dynamicLinks.push({ name: 'Interior Work', href: '/interior-work' });
+            } else {
+              dynamicLinks.push({ 
+                name: cat, 
+                href: `/category/${encodeURIComponent(cat)}` 
+              });
+            }
+          });
+
+          dynamicLinks.push({ name: 'Contact', href: '/contact' });
+          setNavLinks(dynamicLinks);
+        }
+      } catch (err) {
+        console.error('Failed to load categories for navbar:', err);
+      }
+    };
+    loadDynamicCategories();
   }, []);
 
   return (
